@@ -48,7 +48,7 @@ end
 #create puppettest website
 file '/etc/nginx/sites-available/default' do
   content ' server {
-  listen 127.0.0.1:8000 default_server;
+  listen   8000 default_server;
 
   access_log /var/log/nginx/puppetaccess.log;
   error_log /var/log/nginx/puppeterror.log;

@@ -71,5 +71,5 @@ end
 #enable and make sure nginx is started
 service 'nginx' do
   supports :status => true
-  action [:enable, :start]
+  action [:enable, :restart]
 end

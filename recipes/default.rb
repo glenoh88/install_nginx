@@ -39,8 +39,8 @@ execute 'git homepage' do
 end
 
 #configure ngnix
-file '/etc/nginx/sites-available/ve-server1.com' do
-  server {
+file '/etc/nginx/sites-available/server1.puppettest.com' do
+  content 'server {
 
   listen   8000;
   server_name  www.puppettest.com;
@@ -60,5 +60,5 @@ file '/etc/nginx/sites-available/ve-server1.com' do
   root   /var/www/homepage/;
   index  index.html;
   }
-  }
+  }'
 end

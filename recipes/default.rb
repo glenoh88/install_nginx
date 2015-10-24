@@ -16,7 +16,7 @@ end
 
 #Install nginx
 execute 'Install nginx' do
-  command 'apt-get install nginx'
+  command 'apt-get -y install nginx'
 end
 
 #set permissions for delete (lazy way to update homepage)
@@ -38,22 +38,20 @@ execute 'git homepage' do
   command 'git clone https://github.com/puppetlabs/exercise-webpage /var/www/homepage'
 end
 
+#set permissions for nginx default website
+execute 'change permissions' do
+  command 'chmod 775 /etc/nginx/sites-available/default'
+  ignore_failure true
+  only_if do ::File.exists?('/etc/nginx/sites-available/default') end
+end
+
 #create puppettest website
-file '/etc/nginx/sites-available/server1.puppettest.com' do
-  content 'server {
+file '/etc/nginx/sites-available/default' do
+  content ' server {
+  listen 127.0.0.1:8000 default_server;
 
-  listen   8000;
-  server_name  www.puppettest.com;
-  rewrite ^/(.*) http://server1.puppettest.com/$1 permanent;
-  }
-
-  server {
-
-  listen   8000;
-  server_name www.puppettest.com;
-
-  access_log /var/www/www.puppettest/logs/access.log;
-  error_log /var/www/www.puppettest/logs/error.log;
+  access_log /var/log/nginx/puppetaccess.log;
+  error_log /var/log/nginx/puppeterror.log;
 
   location / {
 
@@ -65,7 +63,7 @@ end
 
 #create symbolic link to puppetest site
 execute 'create symbolic link' do
-  command 'ln -s /etc/nginx/sites-available/server1.puppettest.com /etc/nginx/sites-enabled/server1.puppettest.com'
+  command 'ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default'
   ignore_failure true
-  not_if do ::File.exists?('/etc/nginx/sites-enabled/server1.puppettest.com') end
+  not_if do ::File.exists?('/etc/nginx/sites-enabled/default') end
 end

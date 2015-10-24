@@ -1,0 +1,21 @@
+server {
+
+listen   8000;
+server_name  www.puppettest.com;
+rewrite ^/(.*) http://server1.puppettest.com/$1 permanent;
+}
+
+server {
+
+listen   8000;
+server_name www.puppettest.com;
+
+access_log /var/www/www.puppettest/logs/access.log;
+error_log /var/www/www.puppettest/logs/error.log;
+
+location / {
+
+root   /var/www/homepage/;
+index  index.html;
+}
+}
